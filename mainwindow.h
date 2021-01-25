@@ -20,10 +20,10 @@
 #include <vtkActor.h>
 #include <vtkProperty.h>
 
-#include "QToolBarRepresentation.h"
-#include "VTKDataModel.h"
+#include "XToolBarRepresentation.h"
+#include "XDataModel.h"
 #include "XViewMenuBar/XViewQMenuBar.h"
-
+#include "XDataModelHandle.h"
 #ifdef Debug
 #define mLog(...) std::cout<<"mLog: "<<__VA_ARGS__<<" "<<__FILE__<<":"<<__LINE__<<std::endl;
 #else
@@ -44,6 +44,15 @@ public:
     int readVtkFile(const QString& filePath);
 
     void toolBarRepAction();
+    static void update(long* p, int flag){
+        auto m = reinterpret_cast<mainwindow*>(p);
+        if(!flag) {
+            auto& dh=XDataModelHandle::GetInstance();
+            m->mRendererList[m->miRendererListCurIndex]->AddActor(dh.getActiveXDataModel()->getActor());
+            m->mRendererList[m->miRendererListCurIndex]->ResetCamera();
+        }
+        m->mRenderWindow->Render();
+    }
 
 private:
     Ui::mainwindow *ui;
@@ -51,16 +60,16 @@ private:
     QString mFileFolder;
     QString mFilePathWithoutSuffix;
 
-    int mVtkDataModelListCurIndex{0};
-    std::vector<VTKDataModel*> mVtkDataModelList;
-    int mRendererListCurIndex{0};
+    int miVtkDataModelListCurIndex{0};
+    std::vector<XDataModel*> mVtkDataModelList;
+    int miRendererListCurIndex{0};
     std::vector<vtkSmartPointer<vtkRenderer>> mRendererList;
     vtkNew<vtkGenericOpenGLRenderWindow> mRenderWindow;
 
     // menubar
-    //XViewQMenuBar *mMenuBar;
+    XViewQMenuBar *mMenuBar;
     // toolbars
-    //QToolBarRepresentation *mToolBarRep;
+    XToolBarRepresentation *mToolBarRep;
 };
 
 #endif //VTKLEARN_MAINWINDOW_H

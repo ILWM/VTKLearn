@@ -6,13 +6,13 @@
 #define VTKLEARN_XVIEWQMENUBAR_H
 
 #include <QMenuBar>
-#include "QMenuFile.h"
+#include "XMenuFile.h"
 class XViewQMenuBar final : public QMenuBar {
 public:
     explicit XViewQMenuBar(QWidget* parent);
     ~XViewQMenuBar() final =default;
 public:
-    QMenuFile menuFile;
+    XMenuFile menuFile;
 };
 
 

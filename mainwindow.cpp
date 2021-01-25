@@ -12,12 +12,19 @@ mainwindow::mainwindow(QWidget *parent) :
     ui->setupUi(this);
     ui->centralView->setRenderWindow(mRenderWindow);
 
-    //mMenuBar=new XViewQMenuBar(this);
-    //setMenuBar(mMenuBar);
-//
-    //mToolBarRep=new QToolBarRepresentation(this);
-    //connect(mToolBarRep,&QToolBarRepresentation::repModeChanged,this,&mainwindow::toolBarRepAction);
-    //addToolBar(mToolBarRep);
+    mMenuBar=new XViewQMenuBar(this);
+    setMenuBar(mMenuBar);
+
+    mToolBarRep=new XToolBarRepresentation(this);
+    addToolBar(mToolBarRep);
+
+    XDataModelHandle::GetInstance().setViewUpdateCallback(reinterpret_cast<long *>(this), mainwindow::update);
+
+    vtkSmartPointer<vtkRenderer> renderer=vtkSmartPointer<vtkRenderer>::New();
+    mRendererList.emplace_back(renderer);
+    miRendererListCurIndex=0;
+    mRenderWindow->AddRenderer(renderer);
+
     /*
     auto *comboBox = new QComboBox(ui->toolBar);
     comboBox->addItems(comboBoxItem);
@@ -26,9 +33,6 @@ mainwindow::mainwindow(QWidget *parent) :
     ui->toolBar->addAction(action);
     */
 
-    //connect(ui->actionOpen, &QAction::triggered,[this]{
-    //    this->importFile();
-    //});
 }
 
 mainwindow::~mainwindow() {
@@ -36,28 +40,15 @@ mainwindow::~mainwindow() {
 }
 
 void mainwindow::importFile() {
-    QFileDialog dialog;
-    dialog.setWindowTitle("Open File");
-    dialog.setDirectory("../../");
-    dialog.setViewMode(QFileDialog::Detail);
-    if(dialog.exec()){
-        mFilePath=dialog.selectedFiles().at(0);
-        mFileFolder=mFilePath.mid(0,mFilePath.lastIndexOf('/'));
-        mFilePathWithoutSuffix=mFilePath.mid(0,mFilePath.lastIndexOf('.'));
-    }
-    if(""!=mFilePath) {
-        if (mFilePath.endsWith("vtk") || mFilePath.endsWith("VTK")) {
-            readVtkFile(mFilePath);
-        }
-    }
+
 }
 
 int mainwindow::readVtkFile(const QString& filePath) {
-    auto* model=new VTKDataModel;
+    auto* model=new XDataModel;
     model->readVTKFile(filePath.toStdString());
     mVtkDataModelList.push_back(model);
     vtkNew<vtkRenderer> renderer;
-    renderer->AddActor(mVtkDataModelList[mVtkDataModelListCurIndex]->getActor());
+    renderer->AddActor(mVtkDataModelList[miVtkDataModelListCurIndex]->getActor());
     mRendererList.emplace_back(renderer);
     mRenderWindow->AddRenderer(renderer);
     mRenderWindow->Render();
@@ -65,6 +56,6 @@ int mainwindow::readVtkFile(const QString& filePath) {
 }
 
 void mainwindow::toolBarRepAction() {
-    //mVtkDataModelList[mVtkDataModelListCurIndex]->setRepType(VTKDataModel::REP_TYPE(mToolBarRep->getRepMode()));
-    //mRenderWindow->Render();
+    mVtkDataModelList[miVtkDataModelListCurIndex]->setRepType(XDataModel::REP_TYPE(mToolBarRep->getRepMode()));
+    mRenderWindow->Render();
 }

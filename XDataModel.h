@@ -2,8 +2,8 @@
 // Created by xyh on 2021/1/24.
 //
 
-#ifndef VTKLEARN_VTKDATAMODEL_H
-#define VTKLEARN_VTKDATAMODEL_H
+#ifndef VTKLEARN_XDATAMODEL_H
+#define VTKLEARN_XDATAMODEL_H
 
 #include <string>
 #include <vtkDataSetReader.h>
@@ -13,7 +13,7 @@
 #include <vtkOutlineFilter.h>
 #include <vtkNew.h>
 
-class VTKDataModel {
+class XDataModel {
 public:
     enum REP_TYPE{
         Points,
@@ -22,8 +22,8 @@ public:
         SurfaceWithEdges,
         WireFrame
     };
-    VTKDataModel()=default;
-    ~VTKDataModel()=default;
+    XDataModel()=default;
+    ~XDataModel()=default;
     void readVTKFile(const std::string& filePath) const;
     vtkSmartPointer<vtkActor> getActor() const;
     void setRepType(REP_TYPE type) const;
@@ -38,4 +38,4 @@ private:
 };
 
 
-#endif //VTKLEARN_VTKDATAMODEL_H
+#endif //VTKLEARN_XDATAMODEL_H

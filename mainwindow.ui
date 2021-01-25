@@ -88,6 +88,11 @@
     <string>Open</string>
    </property>
   </action>
+  <action name="actionOpen_2">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

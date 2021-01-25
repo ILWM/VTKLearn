@@ -2,20 +2,20 @@
 // Created by xyh on 2021/1/24.
 //
 
-#include "VTKDataModel.h"
+#include "XDataModel.h"
 
-void VTKDataModel::readVTKFile(const std::string& filePath) const {
+void XDataModel::readVTKFile(const std::string& filePath) const {
     mDatasetReader->SetFileName(filePath.c_str());
     mDatasetMapper->SetInputConnection(mDatasetReader->GetOutputPort());
     mActor->SetMapper(mDatasetMapper);
     mActor->Modified();
 }
 
-vtkSmartPointer<vtkActor> VTKDataModel::getActor() const {
+vtkSmartPointer<vtkActor> XDataModel::getActor() const {
     return mActor;
 }
 
-void VTKDataModel::setRepType(VTKDataModel::REP_TYPE type) const {
+void XDataModel::setRepType(XDataModel::REP_TYPE type) const {
     switch (type) {
         case REP_TYPE::Points :
             mActor->GetProperty()->SetRepresentationToPoints();
