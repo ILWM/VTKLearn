@@ -18,7 +18,11 @@ include_directories(XViewToolBars)
 include_directories(XViewActions)
 include_directories(../)
 
-add_executable(${PROJECT_NAME} main.cpp mainwindow.cpp mainwindow.h mainwindow.ui XViewActions/XActionRepresentation.cpp XViewActions/XActionRepresentation.h XViewToolBars/XToolBarRepresentation.cpp XViewToolBars/XToolBarRepresentation.h XDataModel.cpp XDataModel.h XViewMenuBar/XViewQMenuBar.cpp XViewMenuBar/XViewQMenuBar.h XViewMenuBar/XMenuFile.cpp XViewMenuBar/XMenuFile.h)
+add_executable(${PROJECT_NAME} main.cpp mainwindow.cpp mainwindow.h mainwindow.ui XViewActions/XActionRepresentation.cpp
+        XViewActions/XActionRepresentation.h XViewToolBars/XToolBarRepresentation.cpp XViewToolBars/XToolBarRepresentation.h
+        XDataModel.cpp XDataModel.h XViewMenuBar/XViewQMenuBar.cpp
+        XViewMenuBar/XViewQMenuBar.h XViewMenuBar/XMenuFile.cpp XViewMenuBar/XMenuFile.h
+        XTreeView.cpp XTreeView.h)
 
 if (NOT CMAKE_PREFIX_PATH)
     message(WARNING "CMAKE_PREFIX_PATH is not defined, you may need to set it "

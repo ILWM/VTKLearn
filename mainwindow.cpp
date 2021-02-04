@@ -3,7 +3,9 @@
 //
 
 // You may need to build the project (run Qt uic code generator) to get "ui_mainwindow.h" resolved
-
+#include <QStandardItemModel>
+#include <QStandardItem>
+#include <QStyleFactory>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -12,11 +14,8 @@ mainwindow::mainwindow(QWidget *parent) :
     ui->setupUi(this);
     ui->centralView->setRenderWindow(mRenderWindow);
 
-    mMenuBar=new XViewQMenuBar(this);
-    setMenuBar(mMenuBar);
+    initWidget();
 
-    mToolBarRep=new XToolBarRepresentation(this);
-    addToolBar(mToolBarRep);
 
     XDataModelHandle::GetInstance().setViewUpdateCallback(reinterpret_cast<long *>(this), mainwindow::update);
 
@@ -24,6 +23,22 @@ mainwindow::mainwindow(QWidget *parent) :
     mRendererList.emplace_back(renderer);
     miRendererListCurIndex=0;
     mRenderWindow->AddRenderer(renderer);
+
+    /*
+    auto model=new QStandardItemModel(ui->treeView);
+    // hide header
+    QTreeView *treeView=new QTreeView(this);
+    //ui->treeView->setHeaderHidden(true);
+    auto rootItem=new QStandardItem();
+    rootItem->setText("builtin");
+    rootItem->setCheckable(false);
+    model->appendRow(rootItem);
+    //ui->treeView->setModel(model);
+    treeView->setModel(model);
+    //ui->treeView->setStyle(QStyleFactory::create("windows"));
+    treeView->setStyle(QStyleFactory::create("windows"));
+    //ui->dockWidgetTree->setWidget(treeView);
+     */
 
     /*
     auto *comboBox = new QComboBox(ui->toolBar);
@@ -35,27 +50,18 @@ mainwindow::mainwindow(QWidget *parent) :
 
 }
 
+
+void mainwindow::initWidget() {
+    mMenuBar=new XViewQMenuBar(this);
+    setMenuBar(mMenuBar);
+
+    mToolBarRep=new XToolBarRepresentation(this);
+    addToolBar(mToolBarRep);
+
+    mTreeView=XDataModelHandle::GetInstance().mXTreeView;
+    ui->dockWidgetTree->setWidget(mTreeView);
+}
+
 mainwindow::~mainwindow() {
     delete ui;
-}
-
-void mainwindow::importFile() {
-
-}
-
-int mainwindow::readVtkFile(const QString& filePath) {
-    auto* model=new XDataModel;
-    model->readVTKFile(filePath.toStdString());
-    mVtkDataModelList.push_back(model);
-    vtkNew<vtkRenderer> renderer;
-    renderer->AddActor(mVtkDataModelList[miVtkDataModelListCurIndex]->getActor());
-    mRendererList.emplace_back(renderer);
-    mRenderWindow->AddRenderer(renderer);
-    mRenderWindow->Render();
-    return 0;
-}
-
-void mainwindow::toolBarRepAction() {
-    mVtkDataModelList[miVtkDataModelListCurIndex]->setRepType(XDataModel::REP_TYPE(mToolBarRep->getRepMode()));
-    mRenderWindow->Render();
 }

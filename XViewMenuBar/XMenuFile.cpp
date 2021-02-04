@@ -20,7 +20,7 @@ QMenu &XMenuFile::get() {
 void XMenuFile::actionOpen() {
     auto& dh=XDataModelHandle::GetInstance();
     QString filePath;
-    XDataModel* xDataModel=new XDataModel;
+    auto xDataModel=new XDataModel;
     QFileDialog dialog;
     dialog.setWindowTitle("Open File");
     dialog.setDirectory(".");
@@ -32,6 +32,11 @@ void XMenuFile::actionOpen() {
     if(""!=filePath) {
         if (filePath.endsWith("vtk") || filePath.endsWith("VTK")) {
             xDataModel->readVTKFile(filePath.toStdString());
+            auto item=new QStandardItem();
+            item->setText(filePath.mid(filePath.lastIndexOf('/')+1,filePath.lastIndexOf('.')-filePath.lastIndexOf('/')-1));
+            item->setCheckState(Qt::Checked);
+            dh.mXTreeView->mStandardItemModel.appendRow(item);
+            xDataModel->setStandardItem(item);
             dh.mXDataModelList.emplace_back(xDataModel);
             dh.miActiveDataModel=dh.mXDataModelList.size()-1;
             dh.viewUpdate();

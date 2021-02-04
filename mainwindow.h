@@ -24,6 +24,7 @@
 #include "XDataModel.h"
 #include "XViewMenuBar/XViewQMenuBar.h"
 #include "XDataModelHandle.h"
+#include "XTreeView.h"
 #ifdef Debug
 #define mLog(...) std::cout<<"mLog: "<<__VA_ARGS__<<" "<<__FILE__<<":"<<__LINE__<<std::endl;
 #else
@@ -40,10 +41,7 @@ Q_OBJECT
 public:
     explicit mainwindow(QWidget *parent = nullptr);
     ~mainwindow() override;
-    void importFile();
-    int readVtkFile(const QString& filePath);
 
-    void toolBarRepAction();
     static void update(long* p, int flag){
         auto m = reinterpret_cast<mainwindow*>(p);
         if(!flag) {
@@ -55,13 +53,11 @@ public:
     }
 
 private:
-    Ui::mainwindow *ui;
-    QString mFilePath;
-    QString mFileFolder;
-    QString mFilePathWithoutSuffix;
+    void initWidget();
 
-    int miVtkDataModelListCurIndex{0};
-    std::vector<XDataModel*> mVtkDataModelList;
+private:
+    Ui::mainwindow *ui;
+
     int miRendererListCurIndex{0};
     std::vector<vtkSmartPointer<vtkRenderer>> mRendererList;
     vtkNew<vtkGenericOpenGLRenderWindow> mRenderWindow;
@@ -70,6 +66,8 @@ private:
     XViewQMenuBar *mMenuBar;
     // toolbars
     XToolBarRepresentation *mToolBarRep;
+    // treeView
+    XTreeView *mTreeView;
 };
 
 #endif //VTKLEARN_MAINWINDOW_H

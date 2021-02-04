@@ -43,3 +43,7 @@ void XDataModel::setRepType(XDataModel::REP_TYPE type) const {
     }
     mActor->Modified();
 }
+
+void XDataModel::setStandardItem(QStandardItem* item) {
+    mStandardItem=item;
+}

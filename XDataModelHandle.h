@@ -7,6 +7,7 @@
 #include <QObject>
 #include <vector>
 #include "XDataModel.h"
+#include "XTreeView.h"
 typedef void (*ViewUpdateFunc)(long*,int);
 class XDataModelHandle : QObject{
 public:
@@ -29,11 +30,14 @@ public:
     }
 private:
     XDataModelHandle(){
-
+        mXTreeView=new XTreeView;
     };
 public:
     int miActiveDataModel{0};
     std::vector<XDataModel*> mXDataModelList;
+    XTreeView *mXTreeView;
+
+    // mainwindow->update
     long* pView;
     ViewUpdateFunc pViewFunc;
 };

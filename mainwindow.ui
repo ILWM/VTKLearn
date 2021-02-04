@@ -40,19 +40,16 @@
    </layout>
   </widget>
   <widget class="QDockWidget" name="dockWidgetTree">
+   <property name="windowTitle">
+    <string>Pipeline Browser</string>
+   </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QTreeWidget" name="treeWidget">
-       <column>
-        <property name="text">
-         <string notr="true">1</string>
-        </property>
-       </column>
-      </widget>
+      <widget class="QTreeView" name="treeView"/>
      </item>
     </layout>
    </widget>

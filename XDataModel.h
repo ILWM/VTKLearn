@@ -12,7 +12,7 @@
 #include <vtkProperty.h>
 #include <vtkOutlineFilter.h>
 #include <vtkNew.h>
-
+#include <QStandardItem>
 class XDataModel {
 public:
     enum REP_TYPE{
@@ -27,7 +27,8 @@ public:
     void readVTKFile(const std::string& filePath) const;
     vtkSmartPointer<vtkActor> getActor() const;
     void setRepType(REP_TYPE type) const;
-
+    void addChildItem();
+    void setStandardItem(QStandardItem* item);
 private:
     vtkNew<vtkDataSetReader> mDatasetReader;
     vtkNew<vtkDataSetMapper> mDatasetMapper;
@@ -35,6 +36,9 @@ private:
     vtkNew<vtkDataSetMapper> mDatasetOutlineMapper;
     vtkNew<vtkOutlineFilter> mOutlineFilter;
     vtkNew<vtkActor> mOutLineActor;
+    QStandardItem* mStandardItem;
+    bool isChildItem{false};
+    std::vector<XDataModel*> marrChildItem;
 };
 
 
