@@ -20,8 +20,8 @@ include_directories(../)
 
 add_executable(${PROJECT_NAME} main.cpp mainwindow.cpp mainwindow.h mainwindow.ui XViewActions/XActionRepresentation.cpp
         XViewActions/XActionRepresentation.h XViewToolBars/XToolBarRepresentation.cpp XViewToolBars/XToolBarRepresentation.h
-        XDataModel.cpp XDataModel.h XViewMenuBar/XViewQMenuBar.cpp
-        XViewMenuBar/XViewQMenuBar.h XViewMenuBar/XMenuFile.cpp XViewMenuBar/XMenuFile.h
+        XDataModel.cpp XDataModel.h XViewMenuBar/XMenuBar.cpp
+        XViewMenuBar/XMenuBar.h XViewMenuBar/XMenuFile.cpp XViewMenuBar/XMenuFile.h
         XTreeView.cpp XTreeView.h)
 
 if (NOT CMAKE_PREFIX_PATH)

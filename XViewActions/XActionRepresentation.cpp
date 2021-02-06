@@ -3,7 +3,7 @@
 //
 
 #include "XActionRepresentation.h"
-
+#include "../XDataModelHandle.h"
 QComboBox &XActionRepresentation::get() {
     return comboBox;
 }
@@ -16,6 +16,6 @@ XActionRepresentation::XActionRepresentation() {
         auto& dh=XDataModelHandle::GetInstance();
         auto dataModel = dh.getActiveXDataModel();
         dataModel->setRepType(XDataModel::REP_TYPE(index));
-        dh.viewUpdate();
+        dh.viewUpdate(XDataModelHandle::Pure);
     });
 }

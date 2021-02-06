@@ -10,16 +10,10 @@
 class XToolBarRepresentation final: public QToolBar{
     Q_OBJECT
 public:
-    explicit XToolBarRepresentation(QWidget* parent);
+    explicit XToolBarRepresentation(QWidget* parent= nullptr);
     ~XToolBarRepresentation() final =default;
-    int getRepMode() const;
-
-signals:
-    void repModeChanged();
-
-private:
+public:
     XActionRepresentation rep;
-    int repMode{2};
  };
 
 

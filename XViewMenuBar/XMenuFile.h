@@ -7,7 +7,7 @@
 
 #include <QMenu>
 #include <QFileDialog>
-#include "../XDataModelHandle.h"
+
 class XMenuFile :public QObject{
 public:
     XMenuFile();

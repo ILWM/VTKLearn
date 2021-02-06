@@ -8,9 +8,16 @@
 #include <vector>
 #include "XDataModel.h"
 #include "XTreeView.h"
+#include "XViewMenuBar/XMenuBar.h"
+#include "XViewToolBars/XToolBarRepresentation.h"
 typedef void (*ViewUpdateFunc)(long*,int);
 class XDataModelHandle : QObject{
 public:
+    enum ViewUpdateFlag{
+        Pure,
+        DataMODIFY,
+        Import
+    };
     ~XDataModelHandle() override =default;
     XDataModelHandle(const XDataModelHandle&)=delete;
     XDataModelHandle& operator=(const XDataModelHandle&)=delete;
@@ -19,25 +26,38 @@ public:
         return instance;
     }
     XDataModel* getActiveXDataModel(){
-        return mXDataModelList[miActiveDataModel];
+        return mXDataModelList[miActiveDataModelIndex];
     };
+    void setActiveDataModelIndex(int index){
+        miActiveDataModelIndex=index;
+    }
+    std::vector<XDataModel*>& getDataModelList(){
+        return mXDataModelList;
+    }
     void setViewUpdateCallback(long* p, ViewUpdateFunc pFunc){
         pView=p;
         pViewFunc=pFunc;
     }
-    void viewUpdate(){
-        pViewFunc(pView,0);
+    void viewUpdate(ViewUpdateFlag flag){
+        pViewFunc(pView,flag);
     }
 private:
     XDataModelHandle(){
         mXTreeView=new XTreeView;
+        mMenuBar=new XMenuBar();
+        mToolBarRep=new XToolBarRepresentation();
     };
 public:
-    int miActiveDataModel{0};
+    int miActiveDataModelIndex{0};
     std::vector<XDataModel*> mXDataModelList;
     XTreeView *mXTreeView;
 
-    // mainwindow->update
+    // menubar
+    XMenuBar *mMenuBar;
+    // toolbars
+    XToolBarRepresentation *mToolBarRep;
+
+    // fot main window update
     long* pView;
     ViewUpdateFunc pViewFunc;
 };

@@ -19,10 +19,11 @@
 #include <vtkDataSetMapper.h>
 #include <vtkActor.h>
 #include <vtkProperty.h>
+#include <vtkCamera.h>
 
 #include "XToolBarRepresentation.h"
 #include "XDataModel.h"
-#include "XViewMenuBar/XViewQMenuBar.h"
+#include "XViewMenuBar/XMenuBar.h"
 #include "XDataModelHandle.h"
 #include "XTreeView.h"
 #ifdef Debug
@@ -42,14 +43,36 @@ public:
     explicit mainwindow(QWidget *parent = nullptr);
     ~mainwindow() override;
 
-    static void update(long* p, int flag){
+    static void update(long* p, int f){
+        auto flag = XDataModelHandle::ViewUpdateFlag(f);
         auto m = reinterpret_cast<mainwindow*>(p);
-        if(!flag) {
-            auto& dh=XDataModelHandle::GetInstance();
-            m->mRendererList[m->miRendererListCurIndex]->AddActor(dh.getActiveXDataModel()->getActor());
-            m->mRendererList[m->miRendererListCurIndex]->ResetCamera();
+        auto& dh=XDataModelHandle::GetInstance();
+        switch (flag) {
+            case XDataModelHandle::ViewUpdateFlag::DataMODIFY:
+                for(auto&item : dh.getDataModelList()){
+                    if(item->getVisibility()){
+                        m->mRendererList[m->miRendererListCurIndex]->AddActor(item->getActor());
+                    }else{
+                        m->mRendererList[m->miRendererListCurIndex]->RemoveActor(item->getActor());
+                    };
+                }
+                m->mRendererList[m->miRendererListCurIndex]->ResetCameraClippingRange();
+                m->mRenderWindow->Render();
+                break;
+            case XDataModelHandle::ViewUpdateFlag::Import:
+                for(auto&item : dh.getDataModelList()){
+                    if(item->getVisibility()){
+                        m->mRendererList[m->miRendererListCurIndex]->AddActor(item->getActor());
+                    }else{
+                        m->mRendererList[m->miRendererListCurIndex]->RemoveActor(item->getActor());
+                    };
+                }
+                m->mRendererList[m->miRendererListCurIndex]->ResetCamera();
+                m->mRenderWindow->Render();
+            case XDataModelHandle::ViewUpdateFlag::Pure :
+            default:
+                m->mRenderWindow->Render();
         }
-        m->mRenderWindow->Render();
     }
 
 private:
@@ -63,11 +86,11 @@ private:
     vtkNew<vtkGenericOpenGLRenderWindow> mRenderWindow;
 
     // menubar
-    XViewQMenuBar *mMenuBar;
+    //XMenuBar *mMenuBar;
     // toolbars
-    XToolBarRepresentation *mToolBarRep;
+    //XToolBarRepresentation *mToolBarRep;
     // treeView
-    XTreeView *mTreeView;
+    //XTreeView *mTreeView;
 };
 
 #endif //VTKLEARN_MAINWINDOW_H

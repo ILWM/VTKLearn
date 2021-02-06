@@ -13,6 +13,7 @@
 #include <vtkOutlineFilter.h>
 #include <vtkNew.h>
 #include <QStandardItem>
+
 class XDataModel {
 public:
     enum REP_TYPE{
@@ -26,10 +27,20 @@ public:
     ~XDataModel()=default;
     void readVTKFile(const std::string& filePath) const;
     vtkSmartPointer<vtkActor> getActor() const;
-    void setRepType(REP_TYPE type) const;
+    void setRepType(REP_TYPE type);
+    REP_TYPE getRepType() const;
     void addChildItem();
-    void setStandardItem(QStandardItem* item);
+    QStandardItem* getStandardItem();
+    void setStandardItem();
+    void setDataName(QString str);
+    void setVisibility(bool f){
+        mbVisibility=f;
+    }
+    bool getVisibility(){
+        return mbVisibility;
+    }
 private:
+    REP_TYPE mRepType{REP_TYPE::Surface};
     vtkNew<vtkDataSetReader> mDatasetReader;
     vtkNew<vtkDataSetMapper> mDatasetMapper;
     vtkNew<vtkActor> mActor;
@@ -37,7 +48,9 @@ private:
     vtkNew<vtkOutlineFilter> mOutlineFilter;
     vtkNew<vtkActor> mOutLineActor;
     QStandardItem* mStandardItem;
-    bool isChildItem{false};
+    bool mbIsChildItem{false};
+    bool mbVisibility{true};
+    QString mStrDataName;
     std::vector<XDataModel*> marrChildItem;
 };
 

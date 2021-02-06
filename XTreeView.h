@@ -7,6 +7,7 @@
 
 #include <QTreeView>
 #include <QStandardItemModel>
+
 class XTreeView:public QTreeView {
 public:
     explicit XTreeView(QWidget *parent = nullptr);

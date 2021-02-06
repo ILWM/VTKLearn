@@ -52,14 +52,13 @@ mainwindow::mainwindow(QWidget *parent) :
 
 
 void mainwindow::initWidget() {
-    mMenuBar=new XViewQMenuBar(this);
-    setMenuBar(mMenuBar);
-
-    mToolBarRep=new XToolBarRepresentation(this);
-    addToolBar(mToolBarRep);
-
-    mTreeView=XDataModelHandle::GetInstance().mXTreeView;
-    ui->dockWidgetTree->setWidget(mTreeView);
+    auto& dh = XDataModelHandle::GetInstance();
+    dh.mMenuBar->setParent(this);
+    setMenuBar(dh.mMenuBar);
+    dh.mToolBarRep->setParent(this);
+    addToolBar(dh.mToolBarRep);
+    dh.mXTreeView->setParent(this);
+    ui->dockWidgetTree->setWidget(dh.mXTreeView);
 }
 
 mainwindow::~mainwindow() {

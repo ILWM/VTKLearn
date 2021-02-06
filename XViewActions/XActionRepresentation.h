@@ -7,8 +7,7 @@
 
 #include <QStringList>
 #include <QComboBox>
-#include "../XDataModelHandle.h"
-typedef void (*RepCallback)(long*);
+
 class XActionRepresentation : public QObject{
 public:
     XActionRepresentation();

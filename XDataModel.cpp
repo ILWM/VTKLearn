@@ -4,6 +4,8 @@
 
 #include "XDataModel.h"
 
+#include <utility>
+
 void XDataModel::readVTKFile(const std::string& filePath) const {
     mDatasetReader->SetFileName(filePath.c_str());
     mDatasetMapper->SetInputConnection(mDatasetReader->GetOutputPort());
@@ -15,7 +17,8 @@ vtkSmartPointer<vtkActor> XDataModel::getActor() const {
     return mActor;
 }
 
-void XDataModel::setRepType(XDataModel::REP_TYPE type) const {
+void XDataModel::setRepType(XDataModel::REP_TYPE type){
+    mRepType=type;
     switch (type) {
         case REP_TYPE::Points :
             mActor->GetProperty()->SetRepresentationToPoints();
@@ -44,6 +47,23 @@ void XDataModel::setRepType(XDataModel::REP_TYPE type) const {
     mActor->Modified();
 }
 
-void XDataModel::setStandardItem(QStandardItem* item) {
+void XDataModel::setStandardItem() {
+    auto item=new QStandardItem();
+    item->setText(mStrDataName);
+    item->setCheckable(true);
+    item->setCheckState(Qt::Checked);
+    item->setEditable(false);
     mStandardItem=item;
+}
+
+void XDataModel::setDataName(QString str) {
+    mStrDataName=std::move(str);
+}
+
+QStandardItem *XDataModel::getStandardItem() {
+    return mStandardItem;
+}
+
+XDataModel::REP_TYPE XDataModel::getRepType() const {
+    return mRepType;
 }

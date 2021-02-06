@@ -3,7 +3,7 @@
 //
 
 #include "XMenuFile.h"
-
+#include "../XDataModelHandle.h"
 XMenuFile::XMenuFile() {
     menu.setTitle("File");
     QAction *aOpen=new QAction("Open",this);
@@ -32,14 +32,25 @@ void XMenuFile::actionOpen() {
     if(""!=filePath) {
         if (filePath.endsWith("vtk") || filePath.endsWith("VTK")) {
             xDataModel->readVTKFile(filePath.toStdString());
-            auto item=new QStandardItem();
-            item->setText(filePath.mid(filePath.lastIndexOf('/')+1,filePath.lastIndexOf('.')-filePath.lastIndexOf('/')-1));
-            item->setCheckState(Qt::Checked);
-            dh.mXTreeView->mStandardItemModel.appendRow(item);
-            xDataModel->setStandardItem(item);
+            auto fileName = filePath.mid(filePath.lastIndexOf('/')+1,filePath.lastIndexOf('.')-filePath.lastIndexOf('/')-1);
+            xDataModel->setDataName(fileName);
+            xDataModel->setStandardItem();
+
+            dh.mXTreeView->mStandardItemModel.appendRow(xDataModel->getStandardItem());
+
+            auto selectionModel = dh.mXTreeView->selectionModel();
+            selectionModel->clearSelection();
+            QModelIndex headModelIndex = dh.mXTreeView->model()->index(dh.mXDataModelList.size()+1, 0);
+            QModelIndex tailModelIndex = dh.mXTreeView->model()->index(dh.mXDataModelList.size()+1, dh.mXTreeView->model()->columnCount()-1);
+            QItemSelection itemSelection(headModelIndex, tailModelIndex);
+            selectionModel->select(itemSelection, QItemSelectionModel::SelectCurrent);
+
             dh.mXDataModelList.emplace_back(xDataModel);
-            dh.miActiveDataModel=dh.mXDataModelList.size()-1;
-            dh.viewUpdate();
+            dh.miActiveDataModelIndex= dh.mXDataModelList.size() - 1;
+
+            dh.mToolBarRep->rep.get().setCurrentIndex(dh.getActiveXDataModel()->getRepType());
+
+            dh.viewUpdate(XDataModelHandle::Import);
         }
     }
 }

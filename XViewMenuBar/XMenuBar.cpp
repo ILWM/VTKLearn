@@ -2,9 +2,9 @@
 // Created by xyh on 2021/1/24.
 //
 
-#include "XViewQMenuBar.h"
+#include "XMenuBar.h"
 
-XViewQMenuBar::XViewQMenuBar(QWidget *parent) : QMenuBar(parent) {
+XMenuBar::XMenuBar(QWidget *parent) : QMenuBar(parent) {
     setParent(parent);
     addMenu(&menuFile.get());
 }
