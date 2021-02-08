@@ -83,7 +83,7 @@ private:
 
     int miRendererListCurIndex{0};
     std::vector<vtkSmartPointer<vtkRenderer>> mRendererList;
-    vtkNew<vtkGenericOpenGLRenderWindow> mRenderWindow;
+    vtkSmartPointer<vtkGenericOpenGLRenderWindow> mRenderWindow;
 
     // menubar
     //XMenuBar *mMenuBar;

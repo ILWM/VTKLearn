@@ -12,18 +12,20 @@
 mainwindow::mainwindow(QWidget *parent) :
         QMainWindow(parent), ui(new Ui::mainwindow) {
     ui->setupUi(this);
-    ui->centralView->setRenderWindow(mRenderWindow);
+
+
 
     initWidget();
+    auto& dh = XDataModelHandle::GetInstance();
+    dh.setViewUpdateCallback(reinterpret_cast<long *>(this), mainwindow::update);
 
-
-    XDataModelHandle::GetInstance().setViewUpdateCallback(reinterpret_cast<long *>(this), mainwindow::update);
-
-    vtkSmartPointer<vtkRenderer> renderer=vtkSmartPointer<vtkRenderer>::New();
-    mRendererList.emplace_back(renderer);
-    miRendererListCurIndex=0;
-    mRenderWindow->AddRenderer(renderer);
-
+    //vtkSmartPointer<vtkRenderer> renderer=vtkSmartPointer<vtkRenderer>::New();
+    //mRendererList.emplace_back(renderer);
+    //miRendererListCurIndex=0;
+    //mRenderWindow->AddRenderer(renderer);
+    mRenderWindow=dh.getActiveRenderWindow();
+    mRendererList=dh.mRendererList;
+    ui->centralView->setRenderWindow(mRenderWindow);
     /*
     auto model=new QStandardItemModel(ui->treeView);
     // hide header
@@ -57,6 +59,8 @@ void mainwindow::initWidget() {
     setMenuBar(dh.mMenuBar);
     dh.mToolBarRep->setParent(this);
     addToolBar(dh.mToolBarRep);
+    dh.mToolBarViewSet->setParent(this);
+    addToolBar(dh.mToolBarViewSet);
     dh.mXTreeView->setParent(this);
     ui->dockWidgetTree->setWidget(dh.mXTreeView);
 }

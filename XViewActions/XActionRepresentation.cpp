@@ -11,7 +11,8 @@ QComboBox &XActionRepresentation::get() {
 XActionRepresentation::XActionRepresentation() {
     comboBoxItem<<"Points"<<"Outline"<<"Surface"<<"Surface With Edges"<<"WireFrame";
     comboBox.addItems(comboBoxItem);
-    comboBox.setCurrentIndex(2);
+    comboBox.setCurrentIndex(-1);
+    comboBox.setEnabled(false);
     connect(&comboBox,QOverload<int>::of(&QComboBox::currentIndexChanged),[&](int index){
         auto& dh=XDataModelHandle::GetInstance();
         auto dataModel = dh.getActiveXDataModel();

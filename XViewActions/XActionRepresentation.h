@@ -11,7 +11,7 @@
 class XActionRepresentation : public QObject{
 public:
     XActionRepresentation();
-    ~XActionRepresentation()=default;
+    ~XActionRepresentation() =default;
     QComboBox& get();
 private:
     QComboBox comboBox;

@@ -6,7 +6,7 @@
 #include "../XDataModelHandle.h"
 XMenuFile::XMenuFile() {
     menu.setTitle("File");
-    QAction *aOpen=new QAction("Open",this);
+    auto aOpen=new QAction("Open",this);
     menu.addAction(aOpen);
     connect(aOpen,&QAction::triggered, [&](){
         actionOpen();
@@ -37,17 +37,18 @@ void XMenuFile::actionOpen() {
             xDataModel->setStandardItem();
 
             dh.mXTreeView->mStandardItemModel.appendRow(xDataModel->getStandardItem());
-
+            // select row
             auto selectionModel = dh.mXTreeView->selectionModel();
             selectionModel->clearSelection();
             QModelIndex headModelIndex = dh.mXTreeView->model()->index(dh.mXDataModelList.size()+1, 0);
             QModelIndex tailModelIndex = dh.mXTreeView->model()->index(dh.mXDataModelList.size()+1, dh.mXTreeView->model()->columnCount()-1);
             QItemSelection itemSelection(headModelIndex, tailModelIndex);
             selectionModel->select(itemSelection, QItemSelectionModel::SelectCurrent);
-
+            // add data
             dh.mXDataModelList.emplace_back(xDataModel);
             dh.miActiveDataModelIndex= dh.mXDataModelList.size() - 1;
-
+            // update representation state
+            dh.mToolBarRep->rep.get().setEnabled(true);
             dh.mToolBarRep->rep.get().setCurrentIndex(dh.getActiveXDataModel()->getRepType());
 
             dh.viewUpdate(XDataModelHandle::Import);

@@ -14,6 +14,8 @@ public:
 
 public:
     QStandardItemModel mStandardItemModel;
+    // hide: not active  show: active
+    bool checkFlag{false};
 };
 
 

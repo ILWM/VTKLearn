@@ -10,4 +10,3 @@ XToolBarRepresentation::XToolBarRepresentation(QWidget* parent) {
     this->addWidget(&rep.get());
     this->setParent(parent);
 }
-
