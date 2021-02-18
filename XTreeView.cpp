@@ -21,6 +21,7 @@ XTreeView::XTreeView(QWidget *parent) : QTreeView(parent) {
         int index=0;
         for(auto&i : dh.getDataModelList()){
             if(i->getStandardItem()==item){
+                //disable not active, enable active cur_active_index
                 if(i->getVisibility()){
                     checkFlag=true;
                 }else{

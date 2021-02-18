@@ -6,11 +6,20 @@
 #define VTKLEARN_XMENUFILTER_H
 
 #include <QAction>
-#include <QObject>
+#include <QMenu>
 
 class XMenuFilter:public QObject {
 public:
     XMenuFilter();
+    QMenu& get();
+    void updateFilterState();
+private:
+    QMenu menu;
+    QMenu* menuAlphabetical;
+    QAction* aAlphabeticalMeshQuality;
+    int miAlphabeticalMeshQualityIndex{1};
+
+    void actionAlphabeticalMeshQuality();
 };
 
 

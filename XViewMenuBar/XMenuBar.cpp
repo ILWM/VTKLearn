@@ -7,4 +7,5 @@
 XMenuBar::XMenuBar(QWidget *parent) : QMenuBar(parent) {
     setParent(parent);
     addMenu(&menuFile.get());
+    addMenu(&menuFilter.get());
 }

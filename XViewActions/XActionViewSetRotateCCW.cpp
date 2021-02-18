@@ -14,20 +14,7 @@ XActionViewSetRotateCCW::XActionViewSetRotateCCW(QObject *parent) {
     connect(this,&QAction::triggered,[](){
         auto& dh=XDataModelHandle::GetInstance();
         auto renderer = dh.getActiveRenderer();
-        auto camera = renderer->GetActiveCamera();
-        double up[3]{0};
-        camera->GetViewUp(up);
-        if(up[0]==1){
-            camera->SetViewUp(0,-1,0);
-        }else if(up[0]==-1){
-            camera->SetViewUp(0,1,0);
-        }else if(up[1]==1){
-            camera->SetViewUp(1,0,0);
-        }else if(up[1]==-1){
-            camera->SetViewUp(-1,0,0);
-        }else if(up[2]==1){
-            //camera->SetFocalPoint()
-        }
+        renderer->GetActiveCamera()->Roll(90);
         renderer->ResetCamera();
         dh.viewUpdate(XDataModelHandle::Pure);
     });

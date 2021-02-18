@@ -29,7 +29,7 @@ public:
     vtkSmartPointer<vtkActor> getActor() const;
     void setRepType(REP_TYPE type);
     REP_TYPE getRepType() const;
-    void addChildItem();
+    void addChildItem(XDataModel* child);
     QStandardItem* getStandardItem();
     void setStandardItem();
     void setDataName(QString str);

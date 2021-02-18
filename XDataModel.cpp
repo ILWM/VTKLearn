@@ -67,3 +67,7 @@ QStandardItem *XDataModel::getStandardItem() {
 XDataModel::REP_TYPE XDataModel::getRepType() const {
     return mRepType;
 }
+
+void XDataModel::addChildItem(XDataModel* child) {
+    marrChildItem.emplace_back(child);
+}

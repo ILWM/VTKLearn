@@ -18,21 +18,19 @@ include_directories(XViewToolBars)
 include_directories(XViewActions)
 include_directories(../)
 
-add_executable(${PROJECT_NAME} main.cpp mainwindow.cpp mainwindow.h mainwindow.ui
-        XViewActions/XActionRepresentation.cpp
-        XViewActions/XActionRepresentation.h
-        XViewActions/XActionViewSetMain.cpp
-        XViewActions/XActionViewSetMain.h
-        XViewToolBars/XToolBarRepresentation.cpp
-        XViewToolBars/XToolBarRepresentation.h
-        XViewToolBars/XToolBarViewSet.cpp
-        XViewToolBars/XToolBarViewSet.h
-        XViewMenuBar/XMenuBar.cpp
-        XViewMenuBar/XMenuBar.h
-        XViewMenuBar/XMenuFile.cpp
-        XViewMenuBar/XMenuFile.h
+file(GLOB_RECURSE X_ACTIONS XViewActions/*)
+file(GLOB_RECURSE X_MENUBAR XViewMenuBar/*)
+file(GLOB_RECURSE X_TOOLBAR XViewToolBars/*)
+
+add_executable(${PROJECT_NAME}
+        ${X_ACTIONS}
+        ${X_MENUBAR}
+        ${X_TOOLBAR}
+        main.cpp
+        mainwindow.cpp mainwindow.h mainwindow.ui
         XDataModel.cpp XDataModel.h
-        XTreeView.cpp XTreeView.h XViewActions/XActionViewSetRear.cpp XViewActions/XActionViewSetRear.h XViewActions/XActionViewSetLeft.cpp XViewActions/XActionViewSetLeft.h XViewActions/XActionViewSetRight.cpp XViewActions/XActionViewSetRight.h XViewActions/XActionViewSetTop.cpp XViewActions/XActionViewSetTop.h XViewActions/XActionViewSetBottom.cpp XViewActions/XActionViewSetBottom.h XViewActions/XActionViewSetReset.cpp XViewActions/XActionViewSetReset.h XViewActions/XActionViewSetRotateCW.cpp XViewActions/XActionViewSetRotateCW.h XViewActions/XActionViewSetRotateCCW.cpp XViewActions/XActionViewSetRotateCCW.h)
+        XTreeView.cpp XTreeView.h
+        )
 
 if (NOT CMAKE_PREFIX_PATH)
     message(WARNING "CMAKE_PREFIX_PATH is not defined, you may need to set it "
