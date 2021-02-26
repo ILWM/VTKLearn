@@ -26,11 +26,21 @@
 #include "XViewMenuBar/XMenuBar.h"
 #include "XDataModelHandle.h"
 #include "XTreeView.h"
-#ifdef Debug
-#define mLog(...) std::cout<<"mLog: "<<__VA_ARGS__<<" "<<__FILE__<<":"<<__LINE__<<std::endl;
-#else
-#define mLog(...)
-#endif
+
+//#ifdef Debug
+//#define mLog(...) std::cout<<"mLog: "<<__VA_ARGS__<<" "<<__FILE__<<":"<<__LINE__<<std::endl;
+//#else
+//#define mLog(...)
+//#endif
+//#include <iostream>
+
+template<typename T>
+void mLog(const T&){std::cout<<std::endl;}
+template<typename T, typename... Types>
+void mLog(const T& first, const Types&... args){
+    std::cout<<first<<" ";
+    mLog(args...);
+}
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mainwindow; }
@@ -85,12 +95,6 @@ private:
     std::vector<vtkSmartPointer<vtkRenderer>> mRendererList;
     vtkSmartPointer<vtkGenericOpenGLRenderWindow> mRenderWindow;
 
-    // menubar
-    //XMenuBar *mMenuBar;
-    // toolbars
-    //XToolBarRepresentation *mToolBarRep;
-    // treeView
-    //XTreeView *mTreeView;
 };
 
 #endif //VTKLEARN_MAINWINDOW_H

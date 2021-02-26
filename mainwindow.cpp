@@ -42,14 +42,6 @@ mainwindow::mainwindow(QWidget *parent) :
     //ui->dockWidgetTree->setWidget(treeView);
      */
 
-    /*
-    auto *comboBox = new QComboBox(ui->toolBar);
-    comboBox->addItems(comboBoxItem);
-    auto *action = new QWidgetAction(ui->toolBar);
-    action->setDefaultWidget(comboBox);
-    ui->toolBar->addAction(action);
-    */
-
 }
 
 

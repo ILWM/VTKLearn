@@ -16,19 +16,20 @@ include_directories(/home/xyh/MyLIBS/VTK-9.0.1/Build/lib)
 
 include_directories(XViewToolBars)
 include_directories(XViewActions)
-include_directories(../)
+include_directories(XViewMenuBar)
 
-file(GLOB_RECURSE X_ACTIONS XViewActions/*)
-file(GLOB_RECURSE X_MENUBAR XViewMenuBar/*)
-file(GLOB_RECURSE X_TOOLBAR XViewToolBars/*)
+# file(GLOB_RECURSE X_ACTIONS XViewActions/*)
+# file(GLOB_RECURSE X_MENUBAR XViewMenuBar/*)
+# file(GLOB_RECURSE X_TOOLBAR XViewToolBars/*)
 
 add_executable(${PROJECT_NAME}
-        ${X_ACTIONS}
-        ${X_MENUBAR}
-        ${X_TOOLBAR}
+        # ${X_ACTIONS}
+        # ${X_MENUBAR}
+        # ${X_TOOLBAR}
         main.cpp
         mainwindow.cpp mainwindow.h mainwindow.ui
         XDataModel.cpp XDataModel.h
+        XDataModelHandle.cpp XDataModelHandle.h
         XTreeView.cpp XTreeView.h
         )
 
@@ -45,3 +46,16 @@ foreach(it ${VTKSO_LIST})
     message(${it})
     target_link_libraries(${PROJECT_NAME} ${it})
 endforeach()
+
+set(LIBRARY_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/out)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/out)
+
+add_subdirectory(XViewMenuBar)
+add_subdirectory(XViewActions)
+add_subdirectory(XViewToolBars)
+link_directories(out)
+target_link_libraries(${PROJECT_NAME}
+        XViewMenuBar
+        XViewActions
+        XViewToolBars
+        )

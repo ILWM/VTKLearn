@@ -6,6 +6,8 @@
 #define VTKLEARN_XDATAMODELHANDLE_H
 #include <QObject>
 #include <vector>
+#include <memory>
+#include <mutex>
 
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkRenderer.h>
@@ -15,6 +17,7 @@
 #include "XViewMenuBar/XMenuBar.h"
 #include "XViewToolBars/XToolBarRepresentation.h"
 #include "XViewToolBars/XToolBarViewSet.h"
+
 typedef void (*ViewUpdateFunc)(long*,int);
 class XDataModelHandle : QObject{
 public:
@@ -26,11 +29,19 @@ public:
     ~XDataModelHandle() override =default;
     XDataModelHandle(const XDataModelHandle&)=delete;
     XDataModelHandle& operator=(const XDataModelHandle&)=delete;
+    // 饿汉
+    // static XDataModelHandle& GetInstance(){
+    //     static XDataModelHandle instance;
+    //     return instance;
+    // }
+    // 懒汉
     static XDataModelHandle& GetInstance(){
-        static XDataModelHandle instance;
-        return instance;
+        static std::once_flag flag;
+        std::call_once(flag,[&]{
+            ptr.reset(new XDataModelHandle);
+        });
+        return *ptr;
     }
-
     XDataModel* getActiveXDataModel(){
         return mXDataModelList[miActiveDataModelIndex];
     };
@@ -62,18 +73,24 @@ public:
     void viewUpdate(ViewUpdateFlag flag){
         pViewFunc(pView,flag);
     }
-private:
-    XDataModelHandle(){
-        mXTreeView=new XTreeView;
-        mMenuBar=new XMenuBar();
-        mToolBarRep=new XToolBarRepresentation();
-        mToolBarViewSet=new XToolBarViewSet();
+    void newRenderWindow(){
         vtkSmartPointer<vtkRenderer> renderer=vtkSmartPointer<vtkRenderer>::New();
         vtkSmartPointer<vtkGenericOpenGLRenderWindow> renderWin=vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
         renderWin->AddRenderer(renderer);
         mRendererList.emplace_back(renderer);
         mRenderWindowList.emplace_back(renderWin);
+        miActiveRendererIndex=mRendererList.size()-1;
+        miActiveRenderWindowIndex=mRenderWindowList.size()-1;
+    }
+private:
+    XDataModelHandle(){
+        mXTreeView=new XTreeView;
+        mMenuBar=new XMenuBar;
+        mToolBarRep=new XToolBarRepresentation;
+        mToolBarViewSet=new XToolBarViewSet;
+        newRenderWindow();
     };
+    static std::unique_ptr<XDataModelHandle> ptr;
 public:
     int miActiveDataModelIndex{0};
     std::vector<XDataModel*> mXDataModelList;
@@ -91,8 +108,8 @@ public:
     XToolBarViewSet *mToolBarViewSet;
 
     // fot main window update
-    long* pView;
-    ViewUpdateFunc pViewFunc;
+    long* pView{};
+    ViewUpdateFunc pViewFunc{};
 };
 
 

@@ -3,3 +3,4 @@
 //
 
 #include "XDataModelHandle.h"
+std::unique_ptr<XDataModelHandle> XDataModelHandle::ptr;
