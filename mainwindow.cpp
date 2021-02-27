@@ -13,35 +13,13 @@ mainwindow::mainwindow(QWidget *parent) :
         QMainWindow(parent), ui(new Ui::mainwindow) {
     ui->setupUi(this);
 
-
-
     initWidget();
     auto& dh = XDataModelHandle::GetInstance();
     dh.setViewUpdateCallback(reinterpret_cast<long *>(this), mainwindow::update);
 
-    //vtkSmartPointer<vtkRenderer> renderer=vtkSmartPointer<vtkRenderer>::New();
-    //mRendererList.emplace_back(renderer);
-    //miRendererListCurIndex=0;
-    //mRenderWindow->AddRenderer(renderer);
-    mRenderWindow=dh.getActiveRenderWindow();
-    mRendererList=dh.mRendererList;
-    ui->centralView->setRenderWindow(mRenderWindow);
-    /*
-    auto model=new QStandardItemModel(ui->treeView);
-    // hide header
-    QTreeView *treeView=new QTreeView(this);
-    //ui->treeView->setHeaderHidden(true);
-    auto rootItem=new QStandardItem();
-    rootItem->setText("builtin");
-    rootItem->setCheckable(false);
-    model->appendRow(rootItem);
-    //ui->treeView->setModel(model);
-    treeView->setModel(model);
-    //ui->treeView->setStyle(QStyleFactory::create("windows"));
-    treeView->setStyle(QStyleFactory::create("windows"));
-    //ui->dockWidgetTree->setWidget(treeView);
-     */
-
+    ui->centralView->setRenderWindow(dh.getActiveRenderWindow());
+    dh.mRenderWindowInteractList.emplace_back(dynamic_cast<vtkGenericRenderWindowInteractor*>(ui->centralView->renderWindow()->GetInteractor()));
+    dh.addAxes();
 }
 
 

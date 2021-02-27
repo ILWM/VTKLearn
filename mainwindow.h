@@ -55,33 +55,34 @@ public:
 
     static void update(long* p, int f){
         auto flag = XDataModelHandle::ViewUpdateFlag(f);
-        auto m = reinterpret_cast<mainwindow*>(p);
         auto& dh=XDataModelHandle::GetInstance();
+        auto renderer=dh.getActiveRenderer();
+        auto renWin=dh.getActiveRenderWindow();
         switch (flag) {
             case XDataModelHandle::ViewUpdateFlag::DataMODIFY:
                 for(auto&item : dh.getDataModelList()){
                     if(item->getVisibility()){
-                        m->mRendererList[m->miRendererListCurIndex]->AddActor(item->getActor());
+                        renderer->AddActor(item->getActor());
                     }else{
-                        m->mRendererList[m->miRendererListCurIndex]->RemoveActor(item->getActor());
+                        renderer->RemoveActor(item->getActor());
                     };
                 }
-                m->mRendererList[m->miRendererListCurIndex]->ResetCameraClippingRange();
-                m->mRenderWindow->Render();
+                renderer->ResetCameraClippingRange();
+                renWin->Render();
                 break;
             case XDataModelHandle::ViewUpdateFlag::Import:
                 for(auto&item : dh.getDataModelList()){
                     if(item->getVisibility()){
-                        m->mRendererList[m->miRendererListCurIndex]->AddActor(item->getActor());
+                        renderer->AddActor(item->getActor());
                     }else{
-                        m->mRendererList[m->miRendererListCurIndex]->RemoveActor(item->getActor());
+                        renderer->RemoveActor(item->getActor());
                     };
                 }
-                m->mRendererList[m->miRendererListCurIndex]->ResetCamera();
-                m->mRenderWindow->Render();
+                renderer->ResetCamera();
+                renWin->Render();
             case XDataModelHandle::ViewUpdateFlag::Pure :
             default:
-                m->mRenderWindow->Render();
+                renWin->Render();
         }
     }
 
@@ -90,11 +91,6 @@ private:
 
 private:
     Ui::mainwindow *ui;
-
-    int miRendererListCurIndex{0};
-    std::vector<vtkSmartPointer<vtkRenderer>> mRendererList;
-    vtkSmartPointer<vtkGenericOpenGLRenderWindow> mRenderWindow;
-
 };
 
 #endif //VTKLEARN_MAINWINDOW_H
