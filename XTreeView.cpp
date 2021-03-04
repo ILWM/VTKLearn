@@ -20,7 +20,7 @@ XTreeView::XTreeView(QWidget *parent) : QTreeView(parent) {
         auto& dh=XDataModelHandle::GetInstance();
         int index=0;
         for(auto&i : dh.getDataModelList()){
-            if(i->getStandardItem()==item){
+            if(i->getStandardItem_().get() == item){
                 //disable not active, enable active cur_active_index
                 if(i->getVisibility()){
                     checkFlag=true;
@@ -49,4 +49,25 @@ XTreeView::XTreeView(QWidget *parent) : QTreeView(parent) {
         dh.mToolBarRep->rep.get().setCurrentIndex(dh.getActiveXDataModel()->getRepType());
         dh.viewUpdate(XDataModelHandle::Pure);
     });
+}
+void addChildNode(std::unique_ptr<XDataModel>& data, QStandardItem* item){
+    data->getStandardItem_()->appendRow(item);
+    for(auto& ch:data->mArrChildItem){
+        if(ch) {
+            addChildNode(ch, data->getStandardItem_()->clone());
+        }
+    }
+}
+void XTreeView::updateTreeNodes() {
+    mStandardItemModel.clear();
+    auto& dh=XDataModelHandle::GetInstance();
+    for(auto& item:dh.mXDataModelList){
+        mStandardItemModel.appendRow(item->getStandardItem_()->clone());
+        for(auto& ch:item->mArrChildItem) {
+            if(ch) {
+                addChildNode(ch, item->getStandardItem_()->clone());
+            }
+        }
+    }
+    expandAll();
 }

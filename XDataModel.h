@@ -6,6 +6,7 @@
 #define VTKLEARN_XDATAMODEL_H
 
 #include <string>
+#include <memory>
 #include <vtkDataSetReader.h>
 #include <vtkDataSetMapper.h>
 #include <vtkActor.h>
@@ -29,14 +30,14 @@ public:
     vtkSmartPointer<vtkActor> getActor() const;
     void setRepType(REP_TYPE type);
     REP_TYPE getRepType() const;
-    void addChildItem(XDataModel* child);
-    QStandardItem* getStandardItem();
-    void setStandardItem();
+    void addChildItem(std::unique_ptr<XDataModel> child);
+    std::unique_ptr<QStandardItem>& getStandardItem_();
+    void setStandardItem_();
     void setDataName(QString str);
     void setVisibility(bool f){
         mbVisibility=f;
     }
-    bool getVisibility(){
+    bool getVisibility() const{
         return mbVisibility;
     }
 private:
@@ -47,11 +48,12 @@ private:
     vtkNew<vtkDataSetMapper> mDatasetOutlineMapper;
     vtkNew<vtkOutlineFilter> mOutlineFilter;
     vtkNew<vtkActor> mOutLineActor;
-    QStandardItem* mStandardItem;
+    std::unique_ptr<QStandardItem> mStandardItem;
     bool mbIsChildItem{false};
     bool mbVisibility{true};
     QString mStrDataName;
-    std::vector<XDataModel*> marrChildItem;
+public:
+    std::vector<std::unique_ptr<XDataModel>> mArrChildItem;
 };
 
 

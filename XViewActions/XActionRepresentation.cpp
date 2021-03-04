@@ -15,7 +15,7 @@ XActionRepresentation::XActionRepresentation() {
     comboBox.setEnabled(false);
     connect(&comboBox,QOverload<int>::of(&QComboBox::currentIndexChanged),[&](int index){
         auto& dh=XDataModelHandle::GetInstance();
-        auto dataModel = dh.getActiveXDataModel();
+        auto dataModel = dh.getActiveXDataModel().get();
         dataModel->setRepType(XDataModel::REP_TYPE(index));
         dh.viewUpdate(XDataModelHandle::Pure);
     });

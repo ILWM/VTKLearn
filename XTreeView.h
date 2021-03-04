@@ -11,7 +11,7 @@
 class XTreeView:public QTreeView {
 public:
     explicit XTreeView(QWidget *parent = nullptr);
-
+    void updateTreeNodes();
 public:
     QStandardItemModel mStandardItemModel;
     // hide: not active  show: active

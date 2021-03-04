@@ -8,7 +8,7 @@ XMenuFilter::XMenuFilter() {
     menu.setTitle("Filters");
     menuAlphabetical=menu.addMenu("Alphabetical");
     aAlphabeticalMeshQuality = new QAction("Mesh Quality",menuAlphabetical);
-    aAlphabeticalMeshQuality->setEnabled(false);
+    aAlphabeticalMeshQuality->setEnabled(true);
     menuAlphabetical->addAction(aAlphabeticalMeshQuality);
     connect(aAlphabeticalMeshQuality,&QAction::triggered, [&](){
         actionAlphabeticalMeshQuality();
@@ -19,9 +19,9 @@ void XMenuFilter::actionAlphabeticalMeshQuality() {
     auto& dh=XDataModelHandle::GetInstance();
     auto xDataModel=new XDataModel;
     xDataModel->setDataName(QString::fromStdString("MeshQuality"+std::to_string(miAlphabeticalMeshQualityIndex++)));
-    xDataModel->setStandardItem();
+    xDataModel->setStandardItem_();
     //dh.getActiveXDataModel()->addChildItem(xDataModel);
-    dh.getActiveXDataModel()->getStandardItem()->appendRow(xDataModel->getStandardItem());
+    dh.getActiveXDataModel()->getStandardItem_()->appendRow(xDataModel->getStandardItem_().get());
 }
 
 QMenu &XMenuFilter::get() {
