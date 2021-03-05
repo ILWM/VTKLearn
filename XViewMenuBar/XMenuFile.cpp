@@ -20,7 +20,7 @@ QMenu &XMenuFile::get() {
 void XMenuFile::actionOpen() {
     auto& dh=XDataModelHandle::GetInstance();
     QString filePath;
-    std::unique_ptr<XDataModel> xDataModel=std::make_unique<XDataModel>();
+    std::shared_ptr<XDataModel> xDataModel=std::make_unique<XDataModel>();
     QFileDialog dialog;
     dialog.setWindowTitle("Open File");
     dialog.setDirectory(".");
@@ -35,10 +35,8 @@ void XMenuFile::actionOpen() {
             auto fileName = filePath.mid(filePath.lastIndexOf('/')+1,filePath.lastIndexOf('.')-filePath.lastIndexOf('/')-1);
             xDataModel->setDataName(fileName);
 
-
-            //dh.mXTreeView->mStandardItemModel.appendRow(xDataModel->getStandardItem_());
-
-
+            //xDataModel->setStandardItem();
+            //dh.mXTreeView->mStandardItemModel.appendRow(xDataModel->getStandardItem().get());
             // select row
             //auto selectionModel = dh.mXTreeView->selectionModel();
             //selectionModel->clearSelection();
@@ -47,6 +45,8 @@ void XMenuFile::actionOpen() {
             //QItemSelection itemSelection(headModelIndex, tailModelIndex);
             //selectionModel->select(itemSelection, QItemSelectionModel::SelectCurrent);
             // add data
+            dh.mXTreeView->activeDataModel.reset();
+            dh.mXTreeView->activeDataModel=xDataModel;
             dh.mXDataModelList.emplace_back(std::move(xDataModel));
             dh.miActiveDataModelIndex= dh.mXDataModelList.size() - 1;
             // update representation state

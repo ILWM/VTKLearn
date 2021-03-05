@@ -47,9 +47,10 @@ void XDataModel::setRepType(XDataModel::REP_TYPE type){
     mActor->Modified();
 }
 
-void XDataModel::setStandardItem_() {
+void XDataModel::setStandardItem() {
     if(mStandardItem== nullptr) {
         mStandardItem=std::make_unique<QStandardItem>();
+        mStandardItem->setData(reinterpret_cast<qlonglong>(this),ITEM);
         mStandardItem->setText(mStrDataName);
         mStandardItem->setCheckable(true);
         mStandardItem->setCheckState(Qt::Checked);
@@ -61,9 +62,9 @@ void XDataModel::setDataName(QString str) {
     mStrDataName=std::move(str);
 }
 
-std::unique_ptr<QStandardItem>& XDataModel::getStandardItem_() {
+std::unique_ptr<QStandardItem>& XDataModel::getStandardItem() {
     if(mStandardItem== nullptr)
-        setStandardItem_();
+        setStandardItem();
     return mStandardItem;
 }
 
@@ -71,6 +72,6 @@ XDataModel::REP_TYPE XDataModel::getRepType() const {
     return mRepType;
 }
 
-void XDataModel::addChildItem(std::unique_ptr<XDataModel> child) {
+void XDataModel::addChildItem(std::shared_ptr<XDataModel> child) {
     mArrChildItem.emplace_back(std::move(child));
 }

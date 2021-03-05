@@ -17,11 +17,11 @@ XMenuFilter::XMenuFilter() {
 
 void XMenuFilter::actionAlphabeticalMeshQuality() {
     auto& dh=XDataModelHandle::GetInstance();
-    auto xDataModel=new XDataModel;
+    auto xDataModel=std::make_shared<XDataModel>();
     xDataModel->setDataName(QString::fromStdString("MeshQuality"+std::to_string(miAlphabeticalMeshQualityIndex++)));
-    xDataModel->setStandardItem_();
-    //dh.getActiveXDataModel()->addChildItem(xDataModel);
-    dh.getActiveXDataModel()->getStandardItem_()->appendRow(xDataModel->getStandardItem_().get());
+    dh.mXTreeView->activeDataModel->addChildItem(std::move(xDataModel));
+    dh.mXTreeView->updateTreeNodes();
+    //dh.getActiveXDataModel()->getStandardItem()->appendRow(xDataModel->getStandardItem().get());
 }
 
 QMenu &XMenuFilter::get() {

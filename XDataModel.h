@@ -15,6 +15,8 @@
 #include <vtkNew.h>
 #include <QStandardItem>
 
+#define ITEM Qt::UserRole + 1
+
 class XDataModel {
 public:
     enum REP_TYPE{
@@ -30,9 +32,9 @@ public:
     vtkSmartPointer<vtkActor> getActor() const;
     void setRepType(REP_TYPE type);
     REP_TYPE getRepType() const;
-    void addChildItem(std::unique_ptr<XDataModel> child);
-    std::unique_ptr<QStandardItem>& getStandardItem_();
-    void setStandardItem_();
+    void addChildItem(std::shared_ptr<XDataModel> child);
+    std::unique_ptr<QStandardItem>& getStandardItem();
+    void setStandardItem();
     void setDataName(QString str);
     void setVisibility(bool f){
         mbVisibility=f;
@@ -53,7 +55,7 @@ private:
     bool mbVisibility{true};
     QString mStrDataName;
 public:
-    std::vector<std::unique_ptr<XDataModel>> mArrChildItem;
+    std::vector<std::shared_ptr<XDataModel>> mArrChildItem;
 };
 
 

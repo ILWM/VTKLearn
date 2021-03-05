@@ -46,7 +46,7 @@ public:
         });
         return *ptr;
     }
-    std::unique_ptr<XDataModel>& getActiveXDataModel(){
+    std::shared_ptr<XDataModel>& getActiveXDataModel(){
         return mXDataModelList[miActiveDataModelIndex];
     };
     void setActiveDataModelIndex(int index){
@@ -67,7 +67,7 @@ public:
         miActiveRenderWindowIndex=index;
     }
 
-    std::vector<std::unique_ptr<XDataModel>>& getDataModelList(){
+    std::vector<std::shared_ptr<XDataModel>>& getDataModelList(){
         return mXDataModelList;
     }
     void setViewUpdateCallback(long* p, ViewUpdateFunc pFunc){
@@ -113,7 +113,7 @@ private:
     static std::unique_ptr<XDataModelHandle> ptr;
 public:
     int miActiveDataModelIndex{0};
-    std::vector<std::unique_ptr<XDataModel>> mXDataModelList;
+    std::vector<std::shared_ptr<XDataModel>> mXDataModelList;
     int miActiveRendererIndex{0};
     std::vector<vtkSmartPointer<vtkRenderer>> mRendererList;
     int miActiveRenderWindowIndex{0};
